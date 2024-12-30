@@ -82,6 +82,16 @@ if __name__ == "__main__":
     solver = OfflineSolver(requests, vehicles, zone_travel_times)
     solver.run()
 
+
+    ######### TODO ##############
+    """
+    评估指标：
+        请求服务率（RSR）：服务请求数与总请求数的比率。
+        累积司机收入（ADI）：所有司机收入的总和，使用特定的收入模型计算每个请求的收入。
+        运行时（RT）：计算车辆调度解决方案每个周期所需的平均运行时间。
+    """
+    ######### TODO ##############
+
 # if __name__ == "__main__":
 #     num_requests = 10
 #     num_vehicles = 5

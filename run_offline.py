@@ -1,4 +1,5 @@
 import networkx as nx
+import joblib
 from graph_offline import build_vehicle_shareability_network, generate_requests, generate_vehicles, generate_zone_travel_times
 import matplotlib.pyplot as plt
 
@@ -63,14 +64,42 @@ class OfflineSolver():
         self.draw_max_flow(self.pos)
         
 
+def load_requests():
+    return joblib.load("requests.pth")
+def load_zone_travel_times():
+    return joblib.load("zone_travel_times.pth")
+def load_zones(zone_travel_times):
+    zones = set()
+    for zone1, zone2 in zone_travel_times:
+        zones.add(zone1)
+        zones.add(zone2)
+    return list(zones)
 if __name__ == "__main__":
-    num_requests = 10
-    num_vehicles = 5
-    zones = ['A', 'B', 'C', 'D', 'E']
-    
-    requests = generate_requests(num_requests, zones)
-    vehicles = generate_vehicles(num_vehicles, zones)
-    zone_travel_times = generate_zone_travel_times(zones)
-    
+    requests = load_requests()
+    zone_travel_times = load_zone_travel_times()
+    zones = load_zones(zone_travel_times)
+    vehicles = generate_vehicles(10000, zones)
     solver = OfflineSolver(requests, vehicles, zone_travel_times)
     solver.run()
+
+
+    ######### TODO ##############
+    """
+    评估指标：
+        请求服务率（RSR）：服务请求数与总请求数的比率。
+        累积司机收入（ADI）：所有司机收入的总和，使用特定的收入模型计算每个请求的收入。
+        运行时（RT）：计算车辆调度解决方案每个周期所需的平均运行时间。
+    """
+    ######### TODO ##############
+
+# if __name__ == "__main__":
+#     num_requests = 10
+#     num_vehicles = 5
+#     zones = ['A', 'B', 'C', 'D', 'E']
+    
+#     requests = generate_requests(num_requests, zones)
+#     vehicles = generate_vehicles(num_vehicles, zones)
+#     zone_travel_times = generate_zone_travel_times(zones)
+    
+#     solver = OfflineSolver(requests, vehicles, zone_travel_times)
+#     solver.run()
